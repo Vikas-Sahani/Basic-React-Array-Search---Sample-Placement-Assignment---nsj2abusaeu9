@@ -1,5 +1,3 @@
-// todo : if input is empty then don't show anything in results
-//      => temprary solution is keep the intital state 0
 import React, { useState } from "react";
 
 import "../styles/App.css";
@@ -21,6 +19,7 @@ const searchArray = [
 ];
 const App = () => {
   const [inputVal, setInputVal] = useState("");
+  const [searchArrInp, setSearchArrInp] = useState([]);
   return (
     <div id="main">
       <label>
@@ -31,9 +30,15 @@ const App = () => {
           type="text"
           id="search-input"
           onChange={function (e) {
-            // if (inputVal.length == 0) {
-            //   setInputVal(0);
-            // }
+            if (e.target.value.length > 0) {
+              setSearchArrInp(
+                searchArray.filter((el) => {
+                  return el.toLowerCase().trim().includes(e.target.value);
+                })
+              );
+            } else {
+              setSearchArrInp([]);
+            }
             setInputVal(e.target.value);
           }}
           // value={inputVal}
@@ -44,17 +49,9 @@ const App = () => {
       <div>
         Results
         <ul>
-          {searchArray
-            .filter((el) => {
-              if (el.toLowerCase().trim().includes(inputVal)) {
-                return el.toLowerCase().trim().includes(inputVal);
-              } else {
-                return false;
-              }
-            })
-            .map((el, i) => {
-              return <li key={i}>{el}</li>;
-            })}
+          {searchArrInp.map((el, i) => {
+            return <li key={i}>{el}</li>;
+          })}
         </ul>
       </div>
     </div>
